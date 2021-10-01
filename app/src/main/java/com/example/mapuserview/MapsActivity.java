@@ -6,6 +6,8 @@ import androidx.core.content.ContextCompat;
 import androidx.fragment.app.FragmentActivity;
 
 import android.Manifest;
+import android.app.Activity;
+import android.app.Application;
 import android.content.Context;
 import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
@@ -17,6 +19,7 @@ import android.location.LocationManager;
 import android.os.Bundle;
 import android.os.Handler;
 import android.widget.EditText;
+import android.widget.Toast;
 
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
@@ -74,13 +77,13 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
 
 //                mMap.addMarker(new MarkerOptions().position(latLng).title(databaseLatitude + " , " + databaseLongitude));
                 if(marker == null){
-                    MarkerOptions options = new MarkerOptions().position(latLng).title("Marker Title").icon(BitmapFromVector(getApplicationContext(), R.drawable.bikes));
-                    options.rotation(location.getBearing());
+                    MarkerOptions options = new MarkerOptions().position(latLng).title("Marker Title").icon(BitmapFromVector(getApplicationContext(), R.drawable.car));
+//                    options.rotation(location.getBearing());
                     marker = mMap.addMarker(options);
                     mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(latLng, 20));
                 }else {
                     marker.setPosition(latLng);
-                    marker.setRotation(location.getBearing());
+//                    marker.setRotation(location.getBearing());
                     mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(latLng, 20));
                 }
                 editTextLatitude.setText(databaseLatitude);
@@ -125,7 +128,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
 //        LatLng sydney = new LatLng(-34, 151);
 //        mMap.addMarker(new MarkerOptions().position(sydney).title("Marker in Sydney"));
 //        mMap.moveCamera(CameraUpdateFactory.newLatLng(sydney));
-
+        mMap.setMapType(GoogleMap.MAP_TYPE_NORMAL);
         locationListener = new LocationListener() {
             @Override
             public void onLocationChanged(@NonNull Location location) {
@@ -153,7 +156,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
             }
         };
 
-        locationManager = (LocationManager) getSystemService(LOCATION_SERVICE);
+        locationManager = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
 
         if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
             // TODO: Consider calling
@@ -166,7 +169,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
             return;
         }
         try{
-            locationManager.requestLocationUpdates(LocationManager.NETWORK_PROVIDER, MIN_TIME, MIN_DIST, locationListener);
+//            locationManager.requestLocationUpdates(LocationManager.NETWORK_PROVIDER, MIN_TIME, MIN_DIST, locationListener);
             locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, MIN_TIME, MIN_DIST, locationListener);
         } catch (Exception e) {
             e.printStackTrace();
